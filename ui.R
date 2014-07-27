@@ -1,11 +1,11 @@
 library(shiny)
 library(kernlab)
-library(caret)
 library(randomForest)
 library(ggplot2)
 library(plyr)
 library(knitr)
 library(datasets)
+library(e1071)
 
 
 data <- mtcars #Make a copy of the original data
@@ -38,7 +38,7 @@ shinyUI(pageWithSidebar(
           
           radioButtons("alg", "Select an algorithm",
                        list("Random Forest" = "rf",
-                            "Support Vector Machines" = "svmLinear",
+                            "Support Vector Machines" = "svm",
                             "Generalized Linear Model" = "glm")),
 
             h3("Input New Vehicle Stats"),
