@@ -45,8 +45,20 @@ shinyServer(function(input, output) {
           dataframe<<-newdata
           c(round(predict(model, newdata),1), 
                  newdata[,colnames(newdata)==input$variable])
-          
-               
+     })
+     
+     newDataFrame <- reactive({
+             data.frame(
+               cyl=as.numeric(input$cyl), 
+               disp=as.numeric(input$disp),
+               hp=as.numeric(input$hp),
+               drat=as.numeric(input$drat),
+               wt=as.numeric(input$wt),
+               qsec=as.numeric(input$qsec), 
+               vs=as.numeric(input$vs), 
+               am=as.numeric(input$am), 
+               gear=as.numeric(input$gear),
+               carb=as.numeric(input$carb))          
      })
      
      modelStatement <- reactive({
@@ -74,5 +86,5 @@ shinyServer(function(input, output) {
           
      output$mpgEstimate <- renderText({mpgEstimate()[[1]]})
      output$model <- renderText(modelStatement())
-     output$df <- renderTable({dataframe})
+     output$df <- renderTable(newDataFrame())
 })
