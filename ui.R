@@ -76,6 +76,13 @@ shinyUI(pageWithSidebar(
           
           h3(paste("MPG Estimate (miles per gallon)")),
           h5(textOutput("name")),
-          h5(textOutput("mpgEstimate"))
+          h5(textOutput("mpgEstimate")),
+          p(""),
+          h5("Calculation run:"),
+          verbatimTextOutput("model"),
+          h5("New car data frame:"),
+          tableOutput("df")
+          
+          
      )
 ))

@@ -20,7 +20,6 @@ shinyServer(function(input, output) {
           paste("mpg ~", input$variable)
      })
      
-     
      mpgEstimate <- reactive({
           set.seed(1234)
           model<-train(mpg~., data=mtcars, method=input$alg)
@@ -37,28 +36,16 @@ shinyServer(function(input, output) {
                carb=as.numeric(input$carb))
           #newdata<-colwise(numberme)(newdata)          
           output$name <- renderText({input$name})
-          print(newdata)
-          c(round(predict(model, newdata),1), newdata[,colnames(newdata)==input$variable])
-             
+          dataframe<<-newdata
+          c(round(predict(model, newdata),1), 
+                 newdata[,colnames(newdata)==input$variable])
+          
+               
      })
      
-     xVar <- reactive({
-          newdata<- data.frame(
-               cyl=input$cyl, 
-               disp=input$disp,
-               hp=input$hp,
-               drat=input$drat,
-               wt=input$wt,
-               qsec=input$qsec, 
-               vs=input$vs, 
-               am=input$am, 
-               gear=input$gear,
-               carb=input$carb)
-               newdata<-colwise(numberme)(newdata)
-               cat(names(input))
-               print(input$variable)
+     modelStatement <- reactive({
+         paste("predict(train(mpg~., data=mtcars, method=", input$alg,", newdata))", sep="")
      })
-     
      
      # Return the formula text for printing as a caption
      output$caption <- renderText({
@@ -73,5 +60,7 @@ shinyServer(function(input, output) {
           points(mpgEstimate()[2],mpgEstimate()[1], pch = 16, cex = 4, col="red")
           })
           
-     output$mpgEstimate <- renderText({mpgEstimate()[1]})
+     output$mpgEstimate <- renderText({mpgEstimate()[[1]]})
+     output$model <- renderText(modelStatement())
+     output$df <- renderTable({dataframe})
 })
